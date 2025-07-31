@@ -1,8 +1,8 @@
 syntax = "proto3";
 package aiserver.v1;
 import "google/protobuf/timestamp.proto";
-// @version: 1.3.6
-// @author: wisdgod nav@wisdgod.com
+// @version: 1.3.6~1.3.7
+// @author: wisdgod <nav@wisdgod.com>
 // @license: MIT OR Apache-2.0
 message SimpleRange { // aiserver.v1.SimpleRange
 	int32 start_line_number = 1;
