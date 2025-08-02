@@ -1,7 +1,7 @@
 syntax = "proto3";
 package aiserver.v1;
 import "google/protobuf/timestamp.proto";
-// @version: 1.3.6~1.3.7
+// @version: 1.3.6~1.3.9
 // @author: wisdgod <nav@wisdgod.com>
 // @license: MIT OR Apache-2.0
 enum EmbeddingModel { // aiserver.v1.EmbeddingModel
