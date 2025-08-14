@@ -1,5 +1,5 @@
 syntax = "proto3";
-// @version: 1.4.4
+// @version: 1.4.4-1.4.5
 // @author: wisdgod <nav@wisdgod.com>
 // @license: MIT OR Apache-2.0
 package aiserver.v1;
@@ -388,12 +388,6 @@ message FileRetrieved { // .aiserver.v1.FileRetrieved
 }
 message FSGetMultiFileContentsResponse { // .aiserver.v1.FSGetMultiFileContentsResponse
 	repeated FileRetrieved files = 1;
-}
-message FSInternalHealthCheckRequest { // .aiserver.v1.FSInternalHealthCheckRequest
-	optional bool from_server = 1;
-}
-message FSInternalHealthCheckResponse { // .aiserver.v1.FSInternalHealthCheckResponse
-	bool success = 1;
 }
 message FSConfigRequest { // .aiserver.v1.FSConfigRequest
 }
@@ -2927,9 +2921,6 @@ service FileSyncService { // .aiserver.v1.FileSyncService
 	rpc FSConfig(FSConfigRequest) returns (FSConfigResponse); // Unary
 	rpc FSGetFileContents(FSGetFileContentsRequest) returns (FSGetFileContentsResponse); // Unary
 	rpc FSGetMultiFileContents(FSGetMultiFileContentsRequest) returns (FSGetMultiFileContentsResponse); // Unary
-	rpc FSInternalSyncFile(FSSyncFileRequest) returns (FSSyncFileResponse); // Unary
-	rpc FSInternalUploadFile(FSUploadFileRequest) returns (FSUploadFileResponse); // Unary
-	rpc FSInternalHealthCheck(FSInternalHealthCheckRequest) returns (FSInternalHealthCheckResponse); // Unary
 }
 service CppService { // .aiserver.v1.CppService
 	rpc MarkCppForEval(MarkCppRequest) returns (MarkCppResponse); // Unary
