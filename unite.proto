@@ -1,5 +1,5 @@
 syntax = "proto3";
-// @version: 1.4.4-1.4.5
+// @version: 1.5.5
 // @author: wisdgod <nav@wisdgod.com>
 // @license: MIT OR Apache-2.0
 package aiserver.v1;
@@ -204,24 +204,6 @@ message CursorRule { // .aiserver.v1.CursorRule
 	optional bool is_from_glob = 4;
 	optional bool always_apply = 5;
 	optional bool attach_to_background_agents = 6;
-}
-message ProjectLayout { // .aiserver.v1.ProjectLayout
-	string root_path = 1;
-	ProjectLayoutDirectoryContent content = 2;
-}
-message ProjectLayoutDirectoryContent { // .aiserver.v1.ProjectLayoutDirectoryContent
-	repeated ProjectLayoutDirectory directories = 1;
-	repeated ProjectLayoutFile files = 2;
-	optional int32 total_files = 3;
-	optional int32 total_subfolders = 4;
-	repeated ProjectLayoutFile hidden_files = 5;
-}
-message ProjectLayoutDirectory { // .aiserver.v1.ProjectLayoutDirectory
-	string name = 1;
-	ProjectLayoutDirectoryContent content = 2;
-}
-message ProjectLayoutFile { // .aiserver.v1.ProjectLayoutFile
-	string name = 1;
 }
 message ImageProto { // .aiserver.v1.ImageProto
 	message Dimension { // .aiserver.v1.ImageProto.Dimension
@@ -1379,6 +1361,7 @@ enum RunTerminalCommandEndedReason { // .aiserver.v1.RunTerminalCommandEndedReas
 	RUN_TERMINAL_COMMAND_ENDED_REASON_EXECUTION_ABORTED = 2;
 	RUN_TERMINAL_COMMAND_ENDED_REASON_EXECUTION_FAILED = 3;
 	RUN_TERMINAL_COMMAND_ENDED_REASON_ERROR_OCCURRED_CHECKING_REASON = 4;
+	RUN_TERMINAL_COMMAND_ENDED_REASON_IDLE_TIMEOUT = 5;
 }
 message ReapplyParams { // .aiserver.v1.ReapplyParams
 	string relative_workspace_path = 1;
@@ -1538,6 +1521,7 @@ message EditFileV2Params { // .aiserver.v1.EditFileV2Params
 message EditFileV2Result { // .aiserver.v1.EditFileV2Result
 	optional string contents_before_edit = 1;
 	optional string eol_sequence = 9;
+	optional string detected_language = 11;
 	bool file_was_created = 2;
 	optional EditFileResult.FileDiff diff = 3;
 	optional bool rejected = 4;
@@ -1971,6 +1955,7 @@ message RunTerminalCommandV2Params { // .aiserver.v1.RunTerminalCommandV2Params
 		optional int32 ai_finish_check_max_attempts = 5;
 		optional int32 ai_finish_check_interval_ms = 6;
 		optional int32 delayer_interval_ms = 7;
+		optional bool ai_check_for_hangs = 8;
 	}
 	string command = 1;
 	optional string cwd = 2;
@@ -1979,6 +1964,7 @@ message RunTerminalCommandV2Params { // .aiserver.v1.RunTerminalCommandV2Params
 	bool is_background = 5;
 	bool require_user_approval = 6;
 	optional ShellCommandParsingResult parsing_result = 7;
+	optional int32 idle_timeout_seconds = 8;
 }
 message RunTerminalCommandV2Result { // .aiserver.v1.RunTerminalCommandV2Result
 	string output = 1;
@@ -2550,6 +2536,11 @@ message ContextPiece { // .aiserver.v1.ContextPiece
 	string content = 2;
 	float score = 3;
 }
+message ContextWindowStatus { // .aiserver.v1.ContextWindowStatus
+	int32 percentage_remaining = 1;
+	optional int32 tokens_used = 2;
+	optional int32 token_limit = 3;
+}
 message RedDiff { // .aiserver.v1.RedDiff
 	string relative_workspace_path = 1;
 	repeated SimplestRange red_ranges = 2;
@@ -2726,6 +2717,7 @@ message ConversationMessage { // .aiserver.v1.ConversationMessage
 			optional int32 current_line_number = 3;
 			optional string current_line_text = 4;
 			optional int32 line_count = 5;
+			optional string absolute_path = 6;
 		}
 		bool is_pill_displayed = 1;
 		repeated string visible_file_paths = 2;
@@ -2808,6 +2800,7 @@ message ConversationMessage { // .aiserver.v1.ConversationMessage
 	optional bool is_review_edits_followup = 72;
 	string request_id = 74;
 	optional IdeEditorsState ide_editors_state = 73;
+	optional ContextWindowStatus context_window_status = 76;
 }
 message CurrentFileLocationData { // .aiserver.v1.CurrentFileLocationData
 	string relative_workspace_path = 1;
@@ -2913,6 +2906,25 @@ message FixLintsSubagentReturnValue { // .aiserver.v1.FixLintsSubagentReturnValu
 }
 message TaskSubagentReturnValue { // .aiserver.v1.TaskSubagentReturnValue
 	string summary = 1;
+}
+message ProjectLayout { // .aiserver.v1.ProjectLayout
+	string root_path = 1;
+	ProjectLayoutDirectoryContent content = 2;
+	optional ListDirV2Result list_dir_v2_result = 3;
+}
+message ProjectLayoutDirectoryContent { // .aiserver.v1.ProjectLayoutDirectoryContent
+	repeated ProjectLayoutDirectory directories = 1;
+	repeated ProjectLayoutFile files = 2;
+	optional int32 total_files = 3;
+	optional int32 total_subfolders = 4;
+	repeated ProjectLayoutFile hidden_files = 5;
+}
+message ProjectLayoutDirectory { // .aiserver.v1.ProjectLayoutDirectory
+	string name = 1;
+	ProjectLayoutDirectoryContent content = 2;
+}
+message ProjectLayoutFile { // .aiserver.v1.ProjectLayoutFile
+	string name = 1;
 }
 service FileSyncService { // .aiserver.v1.FileSyncService
 	rpc FSUploadFile(FSUploadFileRequest) returns (FSUploadFileResponse); // Unary
