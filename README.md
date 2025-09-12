@@ -6,7 +6,7 @@ A reverse-engineered Protocol Buffers definition project that enables Cursor Tab
 
 This project provides Protocol Buffers definitions for integrating Cursor Tab features into third-party applications and platforms through reverse engineering efforts.
 
-**Current Version**: 1.5.5
+**Current Version**: 1.6.14
 
 > **Important Notice**
 > 
